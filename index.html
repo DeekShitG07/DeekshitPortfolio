@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Deekshit</title>
+    <style>
+        /* Reset and Basic Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin-top: 60px; opacity: 0; transition: opacity 1s; } /* Initial opacity for fade-in effect */
+        a { text-decoration: none; color: inherit; }
+
+        /* Dark Mode Styles */
+        body.dark-mode { background: #121212; color: #e0e0e0; }
+        body.dark-mode header, body.dark-mode footer, body.dark-mode nav { background: #1f1f1f; }
+        body.dark-mode .cta-button, body.dark-mode .resume-link, body.dark-mode .contact-form button { background: #e94e77; }
+        body.dark-mode .contact-form input, body.dark-mode .contact-form textarea { border: 1px solid #333; }
+        body.dark-mode .skill { background: #333; color: #e0e0e0; }
+
+        /* Light Mode Styles (default) */
+        header { background: #333; color: #fff; text-align: center; padding: 20px; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.8); padding: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        .nav-links { display: flex; list-style: none; gap: 10px; }
+        .nav-links li { margin: 0; }
+        .nav-links li a { color: #fff; padding: 8px 12px; display: block; }
+        .toggle-button { background: #e94e77; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; z-index: 1000; }
+        .hamburger { display: none; cursor: pointer; font-size: 24px; }
+
+        /* Hamburger Menu */
+        .hamburger.active + .nav-links { display: flex; flex-direction: column; gap: 10px; position: absolute; top: 60px; right: 10px; background: rgba(0, 0, 0, 0.9); padding: 10px; border-radius: 5px; }
+
+        /* Footer */
+        footer { background: #333; color: #fff; text-align: center; padding: 15px; }
+        .cta-button, .resume-link { background: #e94e77; color: #fff; padding: 8px 15px; border-radius: 5px; }
+        .contact-form input, .contact-form textarea { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; }
+        .contact-form button { background: #e94e77; color: #fff; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; }
+
+        /* Header Styles */
+        .header-content { display: flex; flex-direction: column; align-items: center; position: relative; }
+        .profile-pic { width: 100px; height: 100px; border-radius: 50%; border: 5px solid #e94e77; margin-bottom: 15px; cursor: pointer; }
+        .toggle-button { position: fixed; top: 10px; right: 10px; background: #e94e77; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; z-index: 1000; }
+
+        /* Skills Section Styles */
+        .skills { text-align: center; padding: 40px 20px; }
+        .skill-set { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .skill { background: #e0e0e0; color: #333; padding: 12px 20px; border-radius: 8px; flex: 1 1 180px; text-align: center; cursor: pointer; transition: background 0.3s, color 0.3s; }
+        .skill:hover { background: #e94e77; color: #fff; }
+
+        /* About Section Styles */
+        .section { padding: 30px 20px; text-align: center; }
+        .profile { max-width: 700px; margin: 0 auto; }
+        .resume-link { margin: 20px 0; display: inline-block; }
+
+        /* Hobbies Section Styles */
+        .hobbies { text-align: center; padding: 40px 20px; background: #f4f4f4; }
+        .hobbies h2 { margin-bottom: 20px; }
+        .hobbies-list { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .hobby { background: #e0e0e0; color: #333; padding: 10px 20px; border-radius: 8px; flex: 1 1 150px; text-align: center; transition: background 0.3s, color 0.3s; }
+        .hobby:hover { background: #e94e77; color: #fff; }
+
+        /* Social Media Section Styles */
+        .social-media { text-align: center; padding: 40px 20px; background: #fff; }
+        .social-media h2 { margin-bottom: 20px; }
+        .social-media a { display: inline-block; margin: 0 10px; }
+        .social-media img { width: 30px; height: 30px; transition: transform 0.3s; }
+        .social-media img:hover { transform: scale(1.1); }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .toggle-button { display: block; }
+            .hamburger { display: block; }
+            .hamburger:before { content: "\2630"; }
+            .nav-links { flex-direction: column; gap: 10px; }
+            .nav-links li a { padding: 10px; font-size: 16px; }
+            .profile-pic { width: 80px; height: 80px; }
+            .header-content h1 { font-size: 1.5rem; }
+            .header-content p { font-size: 1rem; }
+        }
+
+        /* Fade-In Animation */
+        .fade-in { opacity: 0; transition: opacity 1s; }
+        .fade-in.visible { opacity: 1; }
+
+        /* Modal Styles */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.8); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 2000; 
+        }
+        .modal-content { 
+            position: relative; 
+            max-width: 90%; 
+            max-height: 90%; 
+            background: #fff; 
+            border-radius: 8px; 
+            overflow: hidden; 
+        }
+        .modal-content img { 
+            width: 100%; 
+            height: auto; 
+        }
+        .modal-close { 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            background: #e94e77; 
+            color: #fff; 
+            border: none; 
+            padding: 8px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            font-size: 18px; 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <p>Loading...</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <button class="toggle-button">Dark Mode</button>
+        <div class="hamburger"></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#hobbies">Hobbies</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header (Hero Section) -->
+    <header id="home">
+        <div class="header-content">
+            <img src="deekshit.jpeg" alt="Profile Picture" class="profile-pic" id="profilePic">
+            <h1>Welcome to Deekshit's Portfolio</h1>
+            <p>Exploring innovative solutions through design and development.</p>
+            <a href="#skills" class="cta-button">View My Skills</a>
+        </div>
+    </header>
+
+    <!-- Modal for Profile Picture -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <img src="deekshit.jpeg" alt="Profile Picture">
+            <button class="modal-close">&times;</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Skills Section -->
+        <section id="skills" class="skills">
+            <h2>My Skills</h2>
+            <div class="skill-set fade-in">
+                <div class="skill" data-search="JavaScript">JavaScript</div>
+                <div class="skill" data-search="React">Java</div>
+                <div class="skill" data-search="CSS">CSS</div>
+                <div class="skill" data-search="HTML">HTML</div>
+                <div class="skill" data-search="Python">Python</div>
+                <div class="skill" data-search="SQL">SQL</div>
+                <div class="skill" data-search="Git">Git</div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <h2>About Me</h2>
+            <div class="profile">
+                <p>Hello! I'm Deekshit, a passionate Developer. With a background in Computer Science, I specialize in FullStacks.</p>
+                <a href="deekshitT.pdf" class="resume-link" download>Download My Resume</a>
+            </div>
+        </section>
+
+        <!-- Hobbies Section -->
+        <section id="hobbies" class="hobbies">
+            <h2>My Hobbies</h2>
+            <div class="hobbies-list">
+                <div class="hobby">Coding</div>
+                <div class="hobby">Stock Market</div>
+                <div class="hobby">Cricket</div>
+                <div class="hobby">Gaming</div>
+            </div>
+        </section>
+
+        <!-- Social Media Section -->
+        <section id="social-media" class="social-media">
+            <h2>Connect with Me</h2>
+            <a href="http://linkedin.com/in/deekshit-gunaga-9a2a6026b" target="_blank">
+                <img src="linkdin.png" alt="LinkedIn"> <!-- Replace with actual LinkedIn logo -->
+            </a>
+            <a href="https://www.instagram.com/deekshit_gunaga26" target="_blank">
+                <img src="insta1.png" title="Instagram" alt="Instagram"> <!-- Replace with actual Instagram logo -->
+            </a>
+            <a href="https://www.facebook.com/" target="_blank">
+                <img src="facebook.png" alt="Facebook"> <!-- Replace with actual Facebook logo -->
+            </a>
+            <a href="mailto:deekshitgunagagmail.com">
+                <img src="mail.png" alt="Email"> <!-- Replace with actual Email logo -->
+            </a>
+            <a href="https://github.com/deekshitgunaga">
+                <img src="github1.png" alt="GitHub"> <!-- Replace with actual GitHub logo -->
+            </a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Deekshit. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Page Load Effect
+        window.addEventListener('load', () => {
+            document.body.style.opacity = 1;
+            document.getElementById('loading-screen').style.display = 'none';
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Fade-In Animation
+        const fadeInElements = document.querySelectorAll('.fade-in');
+
+        const isElementInViewport = (el) => {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        };
+
+        const checkFadeIn = () => {
+            fadeInElements.forEach(el => {
+                if (isElementInViewport(el)) {
+                    el.classList.add('visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', checkFadeIn);
+        checkFadeIn();  // Check on load
+
+        // Dark Mode Toggle
+        const toggleButton = document.querySelector('.toggle-button');
+        toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Hamburger Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Skill Click Event
+        document.querySelectorAll('.skill').forEach(skill => {
+            skill.addEventListener('click', () => {
+                const searchTerm = skill.getAttribute('data-search');
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(searchTerm)}`, '_blank');
+            });
+        });
+
+        // Profile Picture Modal
+        const profilePic = document.getElementById('profilePic');
+        const profileModal = document.getElementById('profileModal');
+        const modalClose = document.querySelector('.modal-close');
+
+        profilePic.addEventListener('click', () => {
+            profileModal.style.display = 'flex';
+        });
+
+        modalClose.addEventListener('click', () => {
+            profileModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === profileModal) {
+                profileModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
